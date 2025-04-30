@@ -23,7 +23,7 @@ resource "aws_iam_role_policy_attachment" "lambda_logging" {
 }
 
 resource "aws_lambda_function" "numpy_lambda" {
-  function_name = "lambda_numpy_hello"
+  function_name = "lambda_numpy_hello_3"
   role          = aws_iam_role.lambda_exec_role.arn
   package_type  = "Image"
   image_uri     = "762233745169.dkr.ecr.us-east-1.amazonaws.com/lambda-numpy-app:latest"
