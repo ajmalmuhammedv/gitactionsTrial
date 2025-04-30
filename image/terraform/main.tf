@@ -2,9 +2,13 @@ provider "aws" {
   region = "us-east-1"
   shared_credentials_files = ["C:/Users/ajmal/.aws/credentials"]# Set the desired region
 }
+# Generate a random suffix to avoid IAM role name collision
+resource "random_id" "suffix" {
+  byte_length = 4
+}
 
 resource "aws_iam_role" "lambda_exec_role" {
-  name = "lambda_numpy_exec_role"
+  name = "lambda_numpy_exec_role-${random_id.suffix.hex}"
   assume_role_policy = jsonencode({
     Version = "2012-10-17",
     Statement = [{
@@ -23,7 +27,7 @@ resource "aws_iam_role_policy_attachment" "lambda_logging" {
 }
 
 resource "aws_lambda_function" "numpy_lambda" {
-  function_name = "lambda_numpy_hello_3"
+  function_name = "lambda_numpy_hello_${random_id.suffix.hex}"
   role          = aws_iam_role.lambda_exec_role.arn
   package_type  = "Image"
   image_uri     = "762233745169.dkr.ecr.us-east-1.amazonaws.com/lambda-numpy-app:latest"
